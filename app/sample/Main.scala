@@ -14,12 +14,12 @@ import org.springframework.scala.context.function._
 
 object Main extends App {
   // create a spring context
-  val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
+ implicit val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
 
   // get hold of the actor system
   val system= ctx.getBean(classOf[ActorSystem])
   // use the Spring Extension to create props for a named actor bean
-  val counter: ActorRef = system.actorOf(springExtProvider.get(system).props("countingActor"), "counter")
+  val counter: ActorRef = system.actorOf(springExtProvider(ctx).get(system).props("countingActor"), "counter")
   // tell it to count three times
 
 

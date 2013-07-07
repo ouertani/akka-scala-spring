@@ -9,34 +9,24 @@ object SpringExtension {
   /**
    * The identifier used to access the SpringExtension.
    */
-  val springExtProvider = new SpringExtension()
+  def springExtProvider(implicit applicationContext: ApplicationContext) = new SpringExtension(applicationContext)
 }
 
-class SpringExtension extends AbstractExtensionId[SpringExt] {
+class SpringExtension(applicationContext: ApplicationContext) extends AbstractExtensionId[SpringExt] {
     import  SpringExtension._
 
   /**
    * Is used by Akka to instantiate the Extension identified by this
    * ExtensionId, internal use only.
    */
-  def createExtension(system: ExtendedActorSystem) = new SpringExt()
+  def createExtension(system: ExtendedActorSystem) = new SpringExt(applicationContext)
 
 }
 
 /**
  * The Extension implementation.
  */
-class SpringExt extends Extension {
-
-  var applicationContext: ApplicationContext=_
-
-  /**
-   * Used to initialize the Spring application context for the extension.
-   * @param applicationContext
-   */
-  def initialize(applicationContext: ApplicationContext) {
-    this.applicationContext = applicationContext
-  }
+class SpringExt(applicationContext: ApplicationContext) extends Extension {
 
   /**
    * Create a Props for the specified actorBeanName using the

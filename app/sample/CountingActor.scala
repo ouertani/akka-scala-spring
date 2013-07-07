@@ -7,7 +7,8 @@ object COUNT
 object GET
 
 
-class CountingActor( countingService: CountingService) extends Actor  {
+class CountingActor extends Actor  {
+    var countingService: CountingService = _
     private var count = 0
     def receive = {
       case COUNT =>   count = countingService.increment(count)
