@@ -35,7 +35,7 @@ class SpringExt extends Extension {
    * @param applicationContext
    */
   def initialize(applicationContext: ApplicationContext) {
-    this.applicationContext = applicationContext;
+    this.applicationContext = applicationContext
   }
 
   /**
@@ -46,7 +46,6 @@ class SpringExt extends Extension {
    * @return a Props that will create the named actor bean using Spring
    */
   def props(actorBeanName: String): Props = {
-    return Props.create(classOf[SpringActorProducer],
-      applicationContext, actorBeanName);
+    return Props(classOf[SpringActorProducer], applicationContext, actorBeanName)
   }
 }

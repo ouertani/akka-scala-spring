@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import sample.CountingActor.Count;
-import sample.CountingActor.Get;
+import sample.CountingActor;
+import sample.GET;
+import sample.COUNT;
 import static sample.SpringExtension.SpringExtProvider;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
@@ -31,9 +32,9 @@ public class SpringTest {
       SpringExtProvider.get(system).props("CountingActor"), "counter");
 
     // tell it to count three times
-    counter.tell(new Count(), null);
-    counter.tell(new Count(), null);
-    counter.tell(new Count(), null);
+    counter.tell(COUNT, null);
+    counter.tell(COUNT, null);
+    counter.tell(COUNT, null);
 
     // check that it has counted correctly
     FiniteDuration duration = FiniteDuration.create(3, TimeUnit.SECONDS);

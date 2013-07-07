@@ -10,19 +10,16 @@ import akka.pattern.ask
 import scala.concurrent._
 import scala.util._
 import SpringExtension._
-
+import org.springframework.scala.context.function._
 
 object Main extends App {
-  // create a spring context and scan the classes
-  val ctx: AnnotationConfigApplicationContext = new AnnotationConfigApplicationContext
-  ctx.scan("sample")
+  // create a spring context
+  val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
 
-
-  ctx.refresh
   // get hold of the actor system
-  val system: ActorSystem = ctx.getBean(classOf[ActorSystem])
+  val system= ctx.getBean(classOf[ActorSystem])
   // use the Spring Extension to create props for a named actor bean
-  val counter: ActorRef = system.actorOf(springExtProvider.get(system).props("CountingActor"), "counter")
+  val counter: ActorRef = system.actorOf(springExtProvider.get(system).props("countingActor"), "counter")
   // tell it to count three times
 
 
