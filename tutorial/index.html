@@ -176,15 +176,11 @@ class TestCountingService extends CountingService{
     delegates to the real counting service by calling <code>super.increment(count);</code>
   </p>
 
-  <p>It also has a method named <code>getNumberOfCalls</code> on line 24 that
+  <p>It also has a method named <code>getNumberOfCalls</code> on line 16 that
     returns the value of the internal counter <code>called</code> that can be
     used during testing to verify how the service is being used by the actor.
   </p>
 
-  <p>One important thing to note is the annotation on line 10 <code>
-    @Named("TestCountingService")</code>. This will allow us to wire together
-    the <code>TestCountingService</code> with the <code>CountingActor</code> in
-    the test during the next step.</p>
 </div>
 <div>
   <h2>Wire up the Test Counting Service</h2>

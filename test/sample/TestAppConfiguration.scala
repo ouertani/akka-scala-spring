@@ -9,6 +9,4 @@ class TestAppConfiguration extends AppConfiguration {
     val cs :  CountingService =  new TestCountingService
     cs
     }
-
-
 }
