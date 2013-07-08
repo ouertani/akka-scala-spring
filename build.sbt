@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.springframework.scala" % "spring-scala" % "1.0.0.M2",
   "javax.inject" % "javax.inject" % "1",
   "junit" % "junit" % "4.11" % "test",
+  "org.specs2" %% "specs2" % "1.13" % "test"  ,
   "com.novocode" % "junit-interface" % "0.9" % "test->default"
 )
 

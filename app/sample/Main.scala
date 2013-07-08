@@ -14,8 +14,7 @@ import org.springframework.scala.context.function._
 object Main extends App {
   // create a spring context
   implicit val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
-  implicit val ec = ExecutionContext.Implicits.global
-  implicit val duration = Timeout(3 seconds)
+  import Config._
 
 
   // get hold of the actor system

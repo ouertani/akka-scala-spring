@@ -1,40 +1,57 @@
 package sample
 
-/**
- * Created with IntelliJ IDEA.
- * User: ouertani
- * Date: 07/07/13
- * Time: 23:57
- * To change this template use File | Settings | File Templates.
- */
-class SpringTest {
-  @Test
-  def testSpring() throws Exception {
-    // create a spring context and scan the classes
-    AnnotationConfigApplicationContext ctx =
-      new AnnotationConfigApplicationContext();
-    ctx.scan("sample");
-    ctx.refresh();
+import scala.concurrent.{Await, ExecutionContext, future, promise}
 
-    // get hold of the actor system
-    val system = ctx.getBean(ActorSystem.class);
-    // use the Spring Extension to create props for a named actor bean
-    val counter = system.actorOf(
-      SpringExtProvider.get(system).props("CountingActor"), "counter");
+import akka.actor.{ActorRef, ActorSystem}
+import org.springframework.scala.context.function.FunctionalConfigApplicationContext
 
-    // tell it to count three times
-    counter.tell(COUNT, null);
-    counter.tell(COUNT, null);
-    counter.tell(COUNT, null);
+import akka.actor.{ActorRef, ActorSystem}
+import sample.SpringExtension._
 
-    // check that it has counted correctly
-    FiniteDuration duration = FiniteDuration.create(3, TimeUnit.SECONDS);
-    Future<Object> result = ask(counter, new Get(),
-      Timeout.durationToTimeout(duration));
-    assertEquals(3, Await.result(result, duration));
+import akka.pattern.ask
+import scala.concurrent._
+import scala.util._
+import org.springframework.scala.context.function._
+import org.specs2.mutable._
+import org.junit.runner._
+import org.specs2.runner._
+import scala.concurrent.Await
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.duration._
 
-    // shut down the actor system
-    system.shutdown();
-    system.awaitTermination();
-  }
+@RunWith(classOf[JUnitRunner])
+class SpringTest extends Specification{
+
+
+   "Simple test" should {
+
+      "Fire 3 count and get 3"    in  {
+        // create a spring context
+        implicit val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
+        import Config._
+        // get hold of the actor system
+        val system = ctx.getBean(classOf[ActorSystem])
+
+        val prop = springExtProvider.get(system).initialize(ctx).props("countingActor")
+
+        // use the Spring Extension to create props for a named actor bean
+        val counter: ActorRef = system.actorOf(prop, "counter")
+
+        // tell it to count three times
+        counter ! COUNT
+        counter ! COUNT
+        counter ! COUNT
+
+        // check the result
+        val result = counter ? GET
+        Await.result(result,  duration) .asInstanceOf[Int] must beEqualTo(3)
+
+
+        // shut down the actor system
+        system.shutdown();
+        system.awaitTermination();
+      }
+   }
+
 }
