@@ -12,7 +12,7 @@ class SpringExtentionImpl extends Extension {
    * Used to initialize the Spring application context for the extension.
    * @param applicationContext
    */
-  def initialize(applicationContext: ApplicationContext) = {
+  def initialize(implicit applicationContext: ApplicationContext) = {
     this.applicationContext = applicationContext
     this
   }
@@ -31,6 +31,6 @@ class SpringExtentionImpl extends Extension {
 
 object SpringExtentionImpl {
 
-  def apply(system : ActorSystem) (implicit ctx: ApplicationContext ) :  SpringExtentionImpl =  SpringExtension().get(system).initialize(ctx)
+  def apply(system : ActorSystem) (implicit ctx: ApplicationContext ) :  SpringExtentionImpl =  SpringExtension().get(system).initialize
 }
 
