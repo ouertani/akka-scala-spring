@@ -24,7 +24,7 @@ object Main extends App {
   val prop = SpringExtentionImpl(system).props("countingActor")
 
   // use the Spring Extension to create props for a named actor bean
-  val counter: ActorRef = system.actorOf(prop, "counter")
+  val counter = system.actorOf(prop, "counter")
 
   // tell it to count three times
   counter ! COUNT

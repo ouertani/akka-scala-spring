@@ -8,7 +8,10 @@ import org.springframework.beans.factory.config.BeanDefinition
 
 
 class AppConfiguration extends FunctionalConfiguration {
-  val ctx = beanFactory.asInstanceOf[ApplicationContext]
+  /**
+   * Load implicit context
+   */
+  implicit val ctx = beanFactory.asInstanceOf[ApplicationContext]
 
   /**
    * Actor system singleton for this application.
@@ -16,12 +19,9 @@ class AppConfiguration extends FunctionalConfiguration {
   val actorSystem = bean() {
     val system = ActorSystem("AkkaScalaSpring")
     // initialize the application context in the Akka Spring Extension
-    SpringExtension().get(system).initialize(ctx)
+    SpringExtentionImpl(system)
     system
   }
-
-
-
 
   val countingService = bean("countingService") {
     new CountingService
@@ -32,7 +32,5 @@ class AppConfiguration extends FunctionalConfiguration {
     ca.countingService = countingService()
     ca
   }
-
-
 
 }

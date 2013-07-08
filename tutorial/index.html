@@ -69,20 +69,22 @@
     Akka Extension</a>. An extension can be thought of as a per actor system
     singleton and the one in this tutorial is defined in the <a
     href="#code/app/sample/SpringExtension.scala" class="shortcut">
-    app/sample/SpringExtension.scala</a> file.
+    app/sample/SpringExtension.scala</a> and  <a
+    href="#code/app/sample/SpringExtentionImpl.scala" class="shortcut">
+    app/sample/SpringExtentionImpl.scala</a> files.
   </p>
 
   <p>The extension consist of two parts. The <code>SpringExtension</code> class
     that defines the methods used by Akka to create the extension for an actor
-    system, and the <code>SpringExt</code> class that defines the methods and
+    system, and the <code>SpringExtentionImpl</code> class that defines the methods and
     fields available on the extension.
   </p>
 
-  <p>On this extension, the <code>SpringExt</code> class, there are only two
+  <p>On this extension, the <code>SpringExtentionImpl</code> class, there are only two
     methods, <code>initialize(ApplicationContext applicationContext)</code>
     that is used during startup to initialize the extension with the right
     Spring application context, and <code>props(String actorBeanName)</code>
-    that constructs a <a href="http://doc.akka.io/docs/akka/2.2.0-RC1/java/untyped-actors.html#Props">
+    that constructs a <a href="http://doc.akka.io/docs/akka/2.2.0-RC2/scala/actors.html#Props">
     Props</a> from an actor bean name, that is used to create an actor.
   </p>
 
@@ -94,7 +96,7 @@
   <h2>Exploring the Code: The Spring Actor Producer</h2>
 
   <p>To let Spring create the actor from a bean name we need a way to allow the
-    Akka <a href="http://doc.akka.io/docs/akka/2.2.0-RC1/java/untyped-actors.html#Props">
+    Akka <a href="http://doc.akka.io/docs/akka/2.2.0-RC2/scala/actors.html#Props">
     Props</a> to delegate actor creation to Spring. This is done in the <a
     href="#code/app/sample/SpringActorProducer.scala" class="shortcut">
     app/sample/SpringActorProducer.scala</a> file.
@@ -103,7 +105,7 @@
   <p>The <code>SpringActorProducer</code> implements the <a
     href="http://doc.akka.io/japi/akka/2.2.0-RC1/akka/actor/IndirectActorProducer.html">
     <code>IndirectActorProducer</code></a> interface which is a way to let the
-    actor be <a href="http://doc.akka.io/docs/akka/2.2.0-RC1/java/untyped-actors.html#Creating_Actors_with_Factory_Methods">
+    actor be <a href="http://doc.akka.io/docs/akka/2.2.0-RC2/scala/actors.html#Creating_Actors_with_Factory_Methods">
     created via a factory method</a>. This interface has two methods that need
     to be implemented, <code>actorClass</code> that will return the type of the
     actor that will be created, and <code>produce</code>, that needs to create
@@ -119,7 +121,7 @@
     app/sample/AppConfiguration.scala</a> file.
   </p>
 
-  <p>The <code>AppConfiguration</code> has a single method <code>actorSystem
+  <p>The <code>AppConfiguration</code> has three methods the most important is <code>actorSystem
     </code> that is responsible for creating the ActorSystem singleton in this
     Spring application. The code creates the actor system and then initializes
     the <code>SpringExtension</code> with the Spring application context needed
@@ -139,32 +141,23 @@
   <p>Open the empty <a href="#code/test/sample/TestCountingService.scala" class="shortcut">
     test/sample/TestCountingService.scala</a> file, and add the code below.
     <strong>Remember to save the file afterwards.</strong>
-<pre><code>package sample;
+<pre><code>package sample
 
-import javax.inject.Named;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * A test counting service that wraps the normal counting service
- * and keeps track of the number of times that it has been called.
- */
-@Named("TestCountingService")
-public class TestCountingService extends CountingService {
+class TestCountingService extends CountingService{
+  private val called = new AtomicInteger(0);
 
-  private AtomicInteger called = new AtomicInteger(0);
-
-  @Override
-  public int increment(int count) {
-    called.incrementAndGet();
-    return super.increment(count);
+  override def  increment( count : Int) = {
+    called.incrementAndGet()
+    super.increment(count)
   }
 
   /**
    * How many times we have called this service.
    */
-  public int getNumberOfCalls() {
-      return called.get();
-  }
+  def getNumberOfCalls()  =  called.get()
+
 }</code></pre>
   </p>
 </div>
@@ -178,7 +171,7 @@ public class TestCountingService extends CountingService {
 
   <p>The class <code>TestCountingService</code> inherits from <code>
     CountingService</code> and overrides the method <code>increment</code> on
-    line 16. In that method it keeps track of how many times it has been
+    line 8. In that method it keeps track of how many times it has been
     called, by using an internal counter named <code>called</code> and then it
     delegates to the real counting service by calling <code>super.increment(count);</code>
   </p>
