@@ -27,12 +27,9 @@ class SpringTest extends Specification{
 
    "Simple test" should {
 
-      "Fire 3 count and get 3"    in  {
+      "Fire 3 COUNT "    in  {
         // create a spring context
         implicit val ctx = FunctionalConfigApplicationContext(classOf[TestAppConfiguration])
-        ctx.getEnvironment().setActiveProfiles("test")
-
-
 
         import Config._
         // get hold of the actor system
