@@ -29,7 +29,11 @@ class SpringTest extends Specification{
 
       "Fire 3 count and get 3"    in  {
         // create a spring context
-        implicit val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
+        implicit val ctx = FunctionalConfigApplicationContext(classOf[TestAppConfiguration])
+        ctx.getEnvironment().setActiveProfiles("test")
+
+
+
         import Config._
         // get hold of the actor system
         val system = ctx.getBean(classOf[ActorSystem])
@@ -47,7 +51,8 @@ class SpringTest extends Specification{
         // check the result
         val result = counter ? GET
         Await.result(result,  duration) .asInstanceOf[Int] must beEqualTo(3)
-
+        val  testService = ctx.getBean(classOf[TestCountingService])
+        testService.getNumberOfCalls must beEqualTo(3)
 
         // shut down the actor system
         system.shutdown();

@@ -20,7 +20,10 @@ class AppConfiguration extends FunctionalConfiguration {
     system
   }
 
-  val countingService = bean() {
+
+
+
+  val countingService = bean("countingService") {
     new CountingService
   }
 
@@ -29,4 +32,7 @@ class AppConfiguration extends FunctionalConfiguration {
     ca.countingService = countingService()
     ca
   }
+
+
+
 }
