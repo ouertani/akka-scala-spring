@@ -1,6 +1,6 @@
 package sample
 
-import akka.actor.{Props, Extension}
+import akka.actor.{ActorSystem, Props, Extension}
 import org.springframework.context.ApplicationContext
 /**
  * The Extension implementation.
@@ -27,5 +27,10 @@ class SpringExtentionImpl extends Extension {
   def props(actorBeanName: String): Props =
     Props(classOf[SpringActorProducer], applicationContext, actorBeanName)
 
+}
+
+object SpringExtentionImpl {
+
+  def apply(system : ActorSystem) (implicit ctx: ApplicationContext ) :  SpringExtentionImpl =  SpringExtension().get(system).initialize(ctx)
 }
 
