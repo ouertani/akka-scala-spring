@@ -10,21 +10,23 @@ import SpringExtension.springExtProvider
 import org.springframework.beans.factory.config.BeanDefinition
 
 class AppConfiguration extends FunctionalConfiguration {
+  val ctx = beanFactory.asInstanceOf[ApplicationContext]
 
   /**
    * Actor system singleton for this application.
    */
- val actorSystem = bean() {
-    val system = ActorSystem.create("AkkaJavaSpring")
+  val actorSystem = bean() {
+    val system = ActorSystem("AkkaScalaSpring")
     // initialize the application context in the Akka Spring Extension
-    springExtProvider(beanFactory.asInstanceOf[ApplicationContext]).get(system)
+    springExtProvider.get(system).initialize(ctx)
     system
   }
 
-  val countingService = bean () {
+  val countingService = bean() {
     new CountingService
   }
-  val countingActor = bean(BeanDefinition.SCOPE_PROTOTYPE) {
+
+  val countingActor = bean("countingActor", aliases = Seq("CountingActor"), scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CountingActor
     ca.countingService = countingService()
     ca
