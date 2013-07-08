@@ -21,7 +21,7 @@ object Main extends App {
   // get hold of the actor system
   val system = ctx.getBean(classOf[ActorSystem])
 
-  val prop = springExtProvider.get(system).initialize(ctx).props("countingActor")
+  val prop = SpringExtension().get(system).initialize(ctx).props("countingActor")
 
   // use the Spring Extension to create props for a named actor bean
   val counter: ActorRef = system.actorOf(prop, "counter")

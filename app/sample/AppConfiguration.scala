@@ -3,8 +3,9 @@ package sample
 import akka.actor.ActorSystem
 import org.springframework.context.ApplicationContext
 import org.springframework.scala.context.function.FunctionalConfiguration
-import SpringExtension.springExtProvider
 import org.springframework.beans.factory.config.BeanDefinition
+
+
 
 class AppConfiguration extends FunctionalConfiguration {
   val ctx = beanFactory.asInstanceOf[ApplicationContext]
@@ -15,7 +16,7 @@ class AppConfiguration extends FunctionalConfiguration {
   val actorSystem = bean() {
     val system = ActorSystem("AkkaScalaSpring")
     // initialize the application context in the Akka Spring Extension
-    springExtProvider.get(system).initialize(ctx)
+    SpringExtension().get(system).initialize(ctx)
     system
   }
 
