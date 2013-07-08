@@ -1,21 +1,22 @@
 package sample
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
+
 import akka.actor.{ActorRef, ActorSystem}
 import sample.SpringExtension._
-import scala.concurrent.{future, promise}
 import scala.concurrent.duration._
 import akka.util.Timeout
 import akka.pattern.ask
 import scala.concurrent._
 import scala.util._
 import org.springframework.scala.context.function._
+import CountingActor._
+
 
 object Main extends App {
   // create a spring context
   implicit val ctx = FunctionalConfigApplicationContext(classOf[AppConfiguration])
-  import Config._
 
+  import Config._
 
   // get hold of the actor system
   val system = ctx.getBean(classOf[ActorSystem])
@@ -30,12 +31,11 @@ object Main extends App {
   counter ! COUNT
   counter ! COUNT
 
-  // print the result
   val result = (counter ? GET).mapTo[Int]
-
+  // print the result
   result onComplete {
-    case Success(result) => println("Got back " + result)
-    case Failure(failure) => println(" Got Exception")
+    case Success(result) => println(s"Got back $result")
+    case Failure(failure) => println(s"Got an exception $failure")
   }
 
   system.shutdown

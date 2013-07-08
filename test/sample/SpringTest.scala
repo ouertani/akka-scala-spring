@@ -19,6 +19,7 @@ import scala.concurrent.Await
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
+import  CountingActor._
 
 @RunWith(classOf[JUnitRunner])
 class SpringTest extends Specification{

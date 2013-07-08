@@ -1,17 +1,13 @@
 package sample
 
 import akka.actor.{Actor, IndirectActorProducer}
-import org.springframework.context.ApplicationContext
-import org.springframework.scala.context.function.FunctionalConfigApplicationContext
+import org.springframework.scala.context.function. {FunctionalConfigApplicationContext => FCA }
 
 
-class SpringActorProducer( ctx : FunctionalConfigApplicationContext,actorBeanName : String )  extends IndirectActorProducer {
+class SpringActorProducer(ctx: FCA, actorBeanName: String) extends IndirectActorProducer {
 
-
-  override def  produce : Actor =    ctx.getBean(actorBeanName, classOf[Actor])
-
+  override def produce: Actor = ctx.getBean(actorBeanName, classOf[Actor])
 
   override def actorClass: Class[_ <: Actor] =
-   ctx.getType(actorBeanName).asInstanceOf[Class[_ <: Actor]]
-
+    ctx.getType(actorBeanName).asInstanceOf[Class[_ <: Actor]]
 }
