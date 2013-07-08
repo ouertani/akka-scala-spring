@@ -81,9 +81,9 @@
   </p>
 
   <p>On this extension, the <code>SpringExtentionImpl</code> class, there are only two
-    methods, <code>initialize(ApplicationContext applicationContext)</code>
+    methods, <code> initialize(implicit applicationContext: ApplicationContext)</code>
     that is used during startup to initialize the extension with the right
-    Spring application context, and <code>props(String actorBeanName)</code>
+    Spring application context, and <code>props(actorBeanName: String): Props</code>
     that constructs a <a href="http://doc.akka.io/docs/akka/2.2.0-RC2/scala/actors.html#Props">
     Props</a> from an actor bean name, that is used to create an actor.
   </p>
