@@ -2,13 +2,13 @@ name := """akka-java-spring"""
 
 version := "0.1"
 
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.2"
 
 resolvers += "SpringSource Milestone Repository" at "http://repo.springsource.org/milestone"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC1",
-  "org.springframework" % "spring-context" % "3.2.2.RELEASE",
+  "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC2",
+  //"org.springframework" % "spring-context" % "3.2.2.RELEASE",
   "org.springframework.scala" % "spring-scala" % "1.0.0.M2",
   "javax.inject" % "javax.inject" % "1",
   "junit" % "junit" % "4.11" % "test",
