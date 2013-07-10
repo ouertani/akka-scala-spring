@@ -8,7 +8,6 @@ resolvers += "SpringSource Milestone Repository" at "http://repo.springsource.or
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC2",
-  //"org.springframework" % "spring-context" % "3.2.2.RELEASE",
   "org.springframework.scala" % "spring-scala" % "1.0.0.M2",
   "javax.inject" % "javax.inject" % "1",
   "junit" % "junit" % "4.11" % "test",
