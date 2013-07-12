@@ -7,7 +7,7 @@ scalaVersion := "2.10.2"
 resolvers += "SpringSource Milestone Repository" at "http://repo.springsource.org/milestone"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC2",
+  "com.typesafe.akka" %% "akka-actor" % "2.2.0",
   "org.springframework.scala" % "spring-scala" % "1.0.0.M2",
   "javax.inject" % "javax.inject" % "1",
   "junit" % "junit" % "4.11" % "test",
