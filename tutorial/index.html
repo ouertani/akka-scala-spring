@@ -48,7 +48,7 @@
 
   <h2> Running the Test</h2>
 
-  <p>There is also a Junit test for the <code>CountingActor</code> located in
+  <p>There is also a Specification test for the <code>CountingActor</code> located in
     the <a href="#code/test/sample/SpringTest.scala" class="shortcut">
     test/sample/SpringTest.scala</a> file. It is structured in the same way as
     the <code>Main</code> application.
@@ -103,12 +103,12 @@
   </p>
 
   <p>The <code>SpringActorProducer</code> implements the <a
-    href="http://doc.akka.io/japi/akka/2.2.0-RC1/akka/actor/IndirectActorProducer.html">
-    <code>IndirectActorProducer</code></a> interface which is a way to let the
+    href="http://doc.akka.io/api/akka/2.2.0-RC1/akka/actor/IndirectActorProducer.html">
+    <code>IndirectActorProducer</code></a> trait which is a way to let the
     actor be <a href="http://doc.akka.io/docs/akka/2.2.0-RC2/scala/actors.html#Creating_Actors_with_Factory_Methods">
-    created via a factory method</a>. This interface has two methods that need
+    created via a factory method</a>. This trait has two methods that need
     to be implemented, <code>actorClass</code> that will return the type of the
-    actor that will be created, and <code>produce</code>, that needs to create
+    actor that will be created, and <code>produce</code> that needs to create
     a new actor instance every time that it is called.
   </p>
 </div>
@@ -132,34 +132,13 @@
 <div>
   <h2>Creating a Test Counting Service</h2>
 
-  <p>Since we want to be able to test our actor thoroughly, let's create a test
-    counting service. In our tutorial it will just wrap the real counting
+  <p>Since we want to be able to test our actor thoroughly, let's move to our test
+    counting service <a href="#code/test/sample/TestCountingService.scala" class="shortcut">
+    test/sample/TestCountingService.scala</a>. In our tutorial it will just wrap the real counting
     service and do some extra book keeping, but it could just as easily be a
     complete mock of the service.
   </p>
-
-  <p>Open the empty <a href="#code/test/sample/TestCountingService.scala" class="shortcut">
-    test/sample/TestCountingService.scala</a> file, and add the code below.
-    <strong>Remember to save the file afterwards.</strong>
-<pre><code>package sample
-
-import java.util.concurrent.atomic.AtomicInteger
-
-class TestCountingService extends CountingService{
-  private val called = new AtomicInteger(0);
-
-  override def  increment( count : Int) = {
-    called.incrementAndGet()
-    super.increment(count)
-  }
-
-  /**
-   * How many times we have called this service.
-   */
-  def getNumberOfCalls()  =  called.get()
-
-}</code></pre>
-  </p>
+ 
 </div>
 <div>
   <h2>A Closer Look at the Test Counting Service</h2>
@@ -190,29 +169,18 @@ class TestCountingService extends CountingService{
   </p>
 
   <p>Open the <a href="#code/test/sample/SpringTest.scala" class="shortcut">
-    test/sample/SpringTest.scala</a> file. And between line 24 and 25, right after
-    <code>ctx.scan("sample");</code>, add the two lines below. <strong>Remember
-    to save the file afterwards.</strong>
-<pre><code>// wire up the test service instead of the normal service
-ctx.registerAlias("TestCountingService", "CountingService");</code></pre>
-  </p>
+    test/sample/SpringTest.scala</a> file. At line 32, we used <a href="#code/test/sample/TestAppConfiguration.scala" class="shortcut">
+    test/sample/TestAppConfiguration.scala</a> insted of <strong>AppConfiguration</strong>
+ 
 
-  <p>This alias will make sure that when we look for a bean named <code>
-    CountingService</code> we will instead get the one named <code>
-    TestCountingService</code>. Check that the tests are still green on the
-    <a href="#test" class="shortcut">Test</a> tab.
+  <p>This will make sure that when we look for a bean named <code>
+    CountingService</code> we will instead get the <code>
+    TestCountingService</code>.
   </p>
 
   <p>We would also like to check that the actor actually called the service the
     right number of times by using the <code>getNumberOfCalls</code> method.
-    Add the code below to the <a href="#code/test/sample/SpringTest.scala" class="shortcut">
-    test/sample/SpringTest.scala</a> file. on line 46, just above the comment <code>
-    // shut down the actor system</code>. <strong>Remember to save the file
-    afterwards.</strong>
-<pre><code>// check that it called the TestCountingService the right number of times
-TestCountingService testService = ctx.getBean(TestCountingService.class);
-assertEquals(3, testService.getNumberOfCalls());
-</code></pre>
+     <code> testService.getNumberOfCalls must beEqualTo(3)</code>.
   </p>
 
   <p> Check that the tests are still green on the

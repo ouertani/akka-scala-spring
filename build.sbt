@@ -1,4 +1,4 @@
-name := """akka-java-spring"""
+name := """akka-scala-spring"""
 
 version := "0.1"
 
